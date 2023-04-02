@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delayed Math Turtle Game</title>
+</head>
+<style>
+    body {
+        display: flexbox;
+    }
+
+    img {
+        width: 50px;
+        height: 50px;
+    }
+</style>
+<body>
+        <figure>
+        <img src="../icons/icons/splinter.png" alt="">
+        <figurecaption>server</figurecaption>
+        </figure>
+
+        <form id="moves" action="">
+        <figure>
+        <img src="../icons/icons/michelangelo.png" alt="">
+        <input type="radio" value="">
+        <figurecaption>michelangelo add</figurecaption>
+        </figure>
+
+        <figure>
+        <img src="../icons/icons/leonardo.png" alt="">
+        <input type="radio" value="">
+        <figurecaption>leonardo multiply</figurecaption>
+        </figure>
+
+        <figure>
+        <img src="../icons/icons/raphael.png" alt="">
+        <input type="radio" value="">
+        <figurecaption>raphael subtract</figurecaption>
+        </figure>
+
+        <figure>
+        <img src="../icons/icons/donatello.png" alt="">
+        <input type="radio" value="">
+        <figurecaption>donatello devide</figurecaption>
+        </figure>
+                <input type="text"> <button>ask</button>
+        </form>
+    <form id="players" action="">
+        <figure>
+        <img src="../icons/icons/rocksteady.png" alt="">
+        <input id="player" type="radio" value="player1">
+        <figurecaption>rocksteady</figurecaption>
+        </figure>
+
+        <figure>
+        <img src="../icons/icons/bebop.png" alt="">
+        <input id="player" type="radio" value="player2">
+        <figurecaption>bebop</figurecaption>
+        </figure>
+    </form>
+<script>
+    document.querySelector('#players').addEventListener('input', (event) => {
+        console.log(event.target.value);
+    });
+
+    function makeMove(inputNumber, functionName) {
+    let playerId = document.cookie.split('=') [1];
+    let fetchPromise = fetch(`http://localhost:3303/player/${functionName}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            playerId,
+            inputNumber
+        })
+    });
+    fetchPromise
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+    })
+    .catch((err) => {
+        console.error(`Server error [${err}]`);
+    })
+}
+
+makeMove('player1', 1, 'add');
+
+function choosePlayer(playerId) {
+    let fetchPromise = fetch(`http://localhost:3303/player/choice`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            playerId,
+        })
+    });
+    fetchPromise
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+    })
+    .catch((err) => {
+        console.error(`Server error [${err}]`);
+    })
+}
+
+choosePlayer("player2");
+
+</script>
+</body>
+</html>
